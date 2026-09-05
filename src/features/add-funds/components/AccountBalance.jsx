@@ -1,0 +1,75 @@
+import {
+    Wallet,
+    ArrowDownToLine,
+    CircleDollarSign,
+} from "lucide-react";
+
+const AccountBalance = ({
+    balance = 0,
+    currency = "PKR",
+    minimumAmount = 100,
+}) => {
+    const formattedBalance = Number(balance).toLocaleString();
+
+    return (
+        <div className="overflow-hidden rounded-md border border-[#e5e7eb] bg-white">
+            {/* Header */}
+            <div className="flex items-center gap-3 border-b border-[#e5e7eb] px-5 py-4">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#fff3e8] text-[#fa6c0a]">
+                    <Wallet size={18} />
+                </div>
+
+                <div>
+                    <h2 className="text-sm font-medium text-[#252525]">
+                        Account Balance
+                    </h2>
+
+                    <p className="text-xs text-[#8a93a5]">
+                        Your available account balance
+                    </p>
+                </div>
+            </div>
+
+            {/* Balance */}
+            <div className="px-5 py-4   ">
+                <p className="text-xs text-[#8a93a5]">
+                    Available Balance
+                </p>
+
+                <div className="mt-1 flex items-baseline gap-2">
+                    <span className="text-2xl font-bold tracking-tight text-[#262626]">
+                        {currency}
+                    </span>
+
+                    <span className="text-2xl font-bold tracking-tight text-[#fa6c0a]">
+                        {formattedBalance}
+                    </span>
+                </div>
+
+                {/* Info */}
+
+
+
+                <div className="rounded-md mt-4 bg-[#f8f9fb] px-3 py-3">
+                    <div className="flex items-center gap-2">
+                        <ArrowDownToLine
+                            size={15}
+                            className="text-[#7b8497]"
+                        />
+
+                        <p className="text-[11px] mt-2 font-medium text-[#8a93a5]">
+                            Min. Deposit
+                        </p>
+                    </div>
+
+                    <p className="mt-1 text-sm font-bold text-[#252525]">
+                        {currency} {minimumAmount}
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    );
+};
+
+export default AccountBalance;
