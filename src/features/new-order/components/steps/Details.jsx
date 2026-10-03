@@ -1,72 +1,247 @@
-import SectionTitle from "../../../../components/ui/SectionTitle";
-import { LinkIcon, ShieldCheck } from "lucide-react";
+import {
+    MessageSquareText,
+} from "lucide-react";
 
 function Details({
     link,
     quantity,
+    comments,
     onLinkChange,
     onQuantityChange,
+    onCommentsChange,
     selectedService,
+    isCustomComments,
 }) {
+    const minQuantity =
+        Number(
+            selectedService?.min
+        ) || 0;
+
+    const maxQuantity =
+        Number(
+            selectedService?.max
+        ) || 0;
+
     return (
-        <section className="px-4 pb-5">
+        <section className="min-w-0">
 
-            <SectionTitle
-                number="4"
-                title="Order Details"
-            />
+            {/* =========================================
+                SERVICE DESCRIPTION
+            ========================================== */}
 
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <div
+                className="
+                    min-w-0
+                    rounded-md
+                    border
+                    border-light-azure
+                    bg-light-blue
+                    px-3
+                    py-4
+                    sm:px-4
+                "
+            >
+                <p
+                    className="
+                        min-h-[140px]
+                        break-words
+                        whitespace-pre-line
+                        text-xs
+                        leading-4
+                        text-dark-gray
+                        sm:text-[13px]
+                        sm:leading-5
+                    "
+                >
+                    {selectedService?.description ||
+                        "Select a service to view its description."}
+                </p>
+            </div>
 
-                {/* LINK */}
+            {/* =========================================
+                LINK
+            ========================================== */}
 
-                <div>
+            <div className="mt-2 min-w-0">
+                <div className="relative min-w-0">
+                    <input
+                        type="url"
+                        value={link}
+                        onChange={(e) =>
+                            onLinkChange(
+                                e.target.value
+                            )
+                        }
+                        placeholder={
+                            selectedService
+                                ? "Enter Post / Reel / Profile Link"
+                                : "Select a service first"
+                        }
+                        disabled={!selectedService}
+                        className="
+                            h-11
+                            w-full
+                            min-w-0
+                            rounded-md
+                            border
+                            border-light-azure
+                            bg-light-blue
+                            px-3
+                            text-xs
+                            text-dark-gray
+                            outline-none
+                            placeholder:text-xs
+                            md:placeholder:text-[13px]
+                            placeholder:text-dark-gray
+                            focus:border-primary-blue
+                            focus:ring-2
+                            focus:ring-primary-blue/10
+                            disabled:cursor-not-allowed
+                            disabled:bg-light-blue
+                            disabled:text-dark-gray
+                            sm:text-sm
+                        "
+                    />
+                </div>
+            </div>
 
-                    <label className="mb-1.5 block text-xs font-medium text-[#57595a]">
-                        Link
-                    </label>
+            {/* =========================================
+                CUSTOM COMMENTS
+            ========================================== */}
 
-                    <div className="relative">
+            {isCustomComments ? (
+                <div className="mt-3 min-w-0">
 
-                        <LinkIcon
+                    <div className="relative min-w-0">
+                        <MessageSquareText
                             size={16}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-[#85898d]"
+                            className="
+                                pointer-events-none
+                                absolute
+                                left-3
+                                top-3
+                                text-dark-gray
+                            "
                         />
 
-                        <input
-                            type="url"
-                            value={link}
+                        <textarea
+                            value={comments}
                             onChange={(e) =>
-                                onLinkChange(e.target.value)
+                                onCommentsChange(
+                                    e.target.value
+                                )
                             }
-                            placeholder="https://www.instagram.com/username"
-                            className="h-11 w-full rounded-md border border-[#d8dce0] pl-10 pr-3 text-sm text-[#57595a] outline-none placeholder:text-[#a3a7aa] focus:border-[#fa6c0a] focus:ring-2 focus:ring-[#fa6c0a]/10"
+                            disabled={!selectedService}
+                            rows={7}
+                            placeholder="Enter one comment per line..."
+                            className="
+                                min-h-[150px]
+                                w-full
+                                resize-y
+                                rounded-md
+                                border
+                                border-light-azure
+                                bg-light-blue
+                                py-3
+                                pl-10
+                                pr-3
+                                text-xs
+                                leading-5
+                                text-dark-gray
+                                outline-none
+                                placeholder:text-[#a3a7aa]
+                                focus:border-primary-blue
+                                focus:ring-2
+                                focus:ring-primary-blue/10
+                                disabled:cursor-not-allowed
+                                disabled:bg-light-blue
+                                disabled:text-dark-gray
+                                sm:text-sm
+                            "
                         />
-
                     </div>
 
-                    <p className="mt-1 text-[11px] text-[#85898d]">
-                        Enter your profile or post link
+                    <div
+                        className="
+                            mt-1
+                            flex
+                            items-center
+                            justify-between
+                            gap-3
+                        "
+                    >
+                        <p
+                            className="
+                                text-[10px]
+                                text-dark-gray
+                                sm:text-[11px]
+                            "
+                        >
+                            Enter one comment per line.
+                        </p>
+
+                        <p
+                            className="
+                                shrink-0
+                                text-[10px]
+                                font-medium
+                                text-primary-blue
+                                sm:text-[11px]
+                            "
+                        >
+                            {
+                                comments
+                                    .split(/\r?\n/)
+                                    .map((comment) =>
+                                        comment.trim()
+                                    )
+                                    .filter(Boolean)
+                                    .length
+                            }{" "}
+                            comments
+                        </p>
+                    </div>
+
+                    <p
+                        className="
+                            mt-1
+                            text-[10px]
+                            text-dark-gray
+                            sm:text-[11px]
+                        "
+                    >
+                        Min:{" "}
+                        {minQuantity.toLocaleString()}
+                        {" • "}
+                        Max:{" "}
+                        {maxQuantity.toLocaleString()}
                     </p>
-
                 </div>
+            ) : (
+                /* =========================================
+                    NORMAL QUANTITY
+                ========================================== */
 
-
-                {/* QUANTITY */}
-
-                <div>
-
-                    <label className="mb-1.5 block text-xs font-medium text-[#57595a]">
-                        Quantity
-                    </label>
+                <div className="mt-2 min-w-0">
 
                     <input
                         type="number"
                         value={quantity}
-                        min={selectedService?.min || 100}
-                        max={selectedService?.max || 100000}
+                        min={
+                            selectedService
+                                ? minQuantity
+                                : undefined
+                        }
+                        max={
+                            selectedService
+                                ? maxQuantity
+                                : undefined
+                        }
+                        step="1"
                         onChange={(e) =>
-                            onQuantityChange(e.target.value)
+                            onQuantityChange(
+                                e.target.value
+                            )
                         }
                         disabled={!selectedService}
                         placeholder={
@@ -74,42 +249,53 @@ function Details({
                                 ? "Enter quantity"
                                 : "Select a service first"
                         }
-                        className="h-11 w-full rounded-md border border-[#d8dce0] px-3 text-sm text-[#57595a] outline-none placeholder:text-[#a3a7aa] focus:border-[#fa6c0a] focus:ring-2 focus:ring-[#fa6c0a]/10 disabled:bg-[#f5f5f5] disabled:text-[#999]"
+                        className="
+                            h-11
+                            w-full
+                            min-w-0
+                            rounded-md
+                            border
+                            border-light-azure
+                            bg-light-blue
+                            px-3
+                            text-xs
+                            text-dark-gray
+                            outline-none
+                            placeholder:text-dark-gray
+                            placeholder:text-xs
+                            md:placeholder:text-[13px]
+                            focus:border-primary-blue
+                            focus:ring-2
+                            focus:ring-primary-blue/10
+                            disabled:cursor-not-allowed
+                            disabled:bg-light-blue
+                            disabled:text-dark-gray
+                            sm:text-sm
+                        "
                     />
 
-                    <p className="mt-1 text-[11px] text-[#85898d]">
-                        Min: {selectedService?.min || 100} • Max:{" "}
-                        {selectedService?.max || 100000}
+                    <p
+                        className="
+                            mt-2
+                            text-[10px]
+                            text-dark-gray
+                            sm:text-[11px]
+                        "
+                    >
+                        {selectedService ? (
+                            <>
+                                Min:{" "}
+                                {minQuantity.toLocaleString()}
+                                {" • "}
+                                Max:{" "}
+                                {maxQuantity.toLocaleString()}
+                            </>
+                        ) : (
+                            "Select a service to view quantity limits"
+                        )}
                     </p>
-
                 </div>
-
-            </div>
-
-
-            {/* SECURITY INFO */}
-
-            <div className="mt-5 flex w-full gap-2 rounded-md border border-[#c9d8ff] bg-[#f5f8ff] p-3">
-
-                <ShieldCheck
-                    size={20}
-                    className="mt-0.5 shrink-0 text-[#3867e8]"
-                />
-
-                <div>
-
-                    <p className="text-sm font-medium text-[#3867e8]">
-                        Safe & Secure
-                    </p>
-
-                    <p className="mt-0.5 text-xs text-[#63708a]">
-                        Your orders and data are safe with us.
-                    </p>
-
-                </div>
-
-            </div>
-
+            )}
         </section>
     );
 }

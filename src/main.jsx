@@ -1,9 +1,19 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.jsx'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import './app.css'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+import { AuthProvider } from "./context/AuthContext.jsx";
+import { CurrencyProvider } from "./context/CurrencyContext.jsx";
+
+ReactDOM.createRoot(
+  document.getElementById("root")
+).render(
+  <React.StrictMode>
+    <AuthProvider>
+      <CurrencyProvider>
+        <App />
+      </CurrencyProvider>
+    </AuthProvider>
+  </React.StrictMode>
+);

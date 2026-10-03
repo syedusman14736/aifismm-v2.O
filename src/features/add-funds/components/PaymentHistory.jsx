@@ -43,29 +43,29 @@ const PaymentHistory = ({ payments = [], onViewPayment }) => {
     };
 
     return (
-        <div className="sticky top-0 self-start flex w-full min-w-0 flex-col overflow-hidden rounded-md border border-[#e5e7eb] bg-white">
+        <div className="sticky top-0 self-start flex w-full min-w-0 flex-col overflow-hidden rounded-md border border-light-azure bg-light-blue">
             {/* =========================
                 Header
             ========================= */}
-            <div className="flex min-w-0 items-center justify-between border-b border-[#e5e7eb] px-5 py-4">
+            <div className="flex min-w-0 items-center justify-between border-b border-light-azure px-5 py-4">
                 <div className="flex min-w-0 items-center gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#fff3e8] text-[#ff7200]">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary-blue/5 text-primary-blue">
                         <History size={18} />
                     </div>
 
                     <div className="min-w-0">
-                        <h2 className="truncate text-sm font-medium text-[#252525]">
+                        <h2 className="truncate text-sm font-medium text-dark-blue">
                             Payment History
                         </h2>
 
-                        <p className="truncate text-xs text-[#8a93a5]">
+                        <p className="truncate text-xs text-dark-gray">
                             Your recent deposits
                         </p>
                     </div>
                 </div>
 
                 {payments.length > 0 && (
-                    <span className="ml-3 shrink-0 rounded-full bg-[#f5f6f8] px-2.5 py-1 text-[11px] font-semibold text-[#7b8497]">
+                    <span className="ml-3 shrink-0 rounded-full bg-[#f5f6f8] px-2.5 py-1 text-[11px] font-medium text-dark-gray">
                         {payments.length}{" "}
                         {payments.length === 1
                             ? "Payment"
@@ -83,11 +83,11 @@ const PaymentHistory = ({ payments = [], onViewPayment }) => {
                         <ReceiptText size={22} />
                     </div>
 
-                    <h3 className="mt-3 text-sm font-medium text-[#252525]">
+                    <h3 className="mt-3 text-sm font-medium text-dark-blue">
                         No payments yet
                     </h3>
 
-                    <p className="mt-1 max-w-[250px] text-xs leading-5 text-[#8a93a5]">
+                    <p className="mt-1 max-w-[250px] text-xs leading-5 text-dark-gray">
                         Your payment history will appear here after
                         you submit your first deposit.
                     </p>
@@ -100,24 +100,24 @@ const PaymentHistory = ({ payments = [], onViewPayment }) => {
                     <div className="hidden w-full min-w-0 overflow-x-auto md:block">
                         <table className="w-full table-fixed">
                             <thead>
-                                <tr className="border-b border-[#e5e7eb] bg-[#fafafa]">
-                                    <th className="w-[24%] px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-[#8a93a5]">
+                                <tr className="border-b border-light-azure bg-[#fafafa]">
+                                    <th className="w-[24%] px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-dark-gray">
                                         Payment
                                     </th>
 
-                                    <th className="w-[25%] px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-[#8a93a5]">
+                                    <th className="w-[25%] px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-dark-gray">
                                         Method
                                     </th>
 
-                                    <th className="w-[17%] px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-[#8a93a5]">
+                                    <th className="w-[17%] px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-dark-gray">
                                         Amount
                                     </th>
 
-                                    <th className="w-[19%] px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-[#8a93a5]">
+                                    <th className="w-[19%] px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-dark-gray">
                                         Status
                                     </th>
 
-                                    <th className="w-[15%] px-4 py-3 text-right text-[11px] font-semibold uppercase tracking-wide text-[#8a93a5]">
+                                    <th className="w-[15%] px-4 py-3 text-right text-[11px] font-semibold uppercase tracking-wide text-dark-gray">
                                         Action
                                     </th>
                                 </tr>
@@ -145,7 +145,7 @@ const PaymentHistory = ({ payments = [], onViewPayment }) => {
                                                         {payment.id}
                                                     </p>
 
-                                                    <p className="mt-1 truncate text-[11px] text-[#8a93a5]">
+                                                    <p className="mt-1 truncate text-[11px] text-dark-gray">
                                                         {formatDate(
                                                             payment.date
                                                         )}
@@ -162,7 +162,7 @@ const PaymentHistory = ({ payments = [], onViewPayment }) => {
                                                         }
                                                     </p>
 
-                                                    <p className="mt-1 truncate text-[11px] text-[#8a93a5]">
+                                                    <p className="mt-1 truncate text-[11px] text-dark-gray">
                                                         TRX:{" "}
                                                         {payment.transactionId ||
                                                             "-"}
@@ -207,7 +207,7 @@ const PaymentHistory = ({ payments = [], onViewPayment }) => {
                                                             payment
                                                         )
                                                     }
-                                                    className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border border-[#e5e7eb] px-3 py-1.5 text-xs font-semibold text-[#7b8497] transition hover:border-[#ff7200] hover:bg-[#fff7f0] hover:text-[#ff7200]"
+                                                    className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border border-light-azure px-3 py-1.5 text-xs font-semibold text-dark-gray transition hover:border-[#ff7200] hover:bg-[#fff7f0] hover:text-[#ff7200]"
                                                 >
                                                     <Eye
                                                         size={14}
@@ -247,7 +247,7 @@ const PaymentHistory = ({ payments = [], onViewPayment }) => {
                                                 {payment.id}
                                             </p>
 
-                                            <p className="mt-1 truncate text-[11px] text-[#8a93a5]">
+                                            <p className="mt-1 truncate text-[11px] text-dark-gray">
                                                 {payment.method}
                                             </p>
                                         </div>
@@ -266,7 +266,7 @@ const PaymentHistory = ({ payments = [], onViewPayment }) => {
                                     {/* Amount + View */}
                                     <div className="mt-4 flex items-center justify-between gap-3">
                                         <div className="min-w-0">
-                                            <p className="text-[11px] text-[#8a93a5]">
+                                            <p className="text-[11px] text-dark-gray">
                                                 Amount
                                             </p>
 
@@ -285,7 +285,7 @@ const PaymentHistory = ({ payments = [], onViewPayment }) => {
                                                     payment
                                                 )
                                             }
-                                            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-[#e5e7eb] px-3 py-1.5 text-xs font-semibold text-[#7b8497] transition hover:border-[#ff7200] hover:bg-[#fff7f0] hover:text-[#ff7200]"
+                                            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-light-azure px-3 py-1.5 text-xs font-semibold text-dark-gray transition hover:border-[#ff7200] hover:bg-[#fff7f0] hover:text-[#ff7200]"
                                         >
                                             <Eye
                                                 size={14}

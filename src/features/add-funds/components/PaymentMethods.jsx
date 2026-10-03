@@ -2,35 +2,38 @@ import {
     WalletCards,
     Smartphone,
     Building2,
+    CreditCard,
 } from "lucide-react";
 
-const PAYMENT_METHODS = [
-    {
-        id: "easypaisa",
-        name: "Easypaisa",
-        description: "Pay using Easypaisa",
-        icon: Smartphone,
-    },
-    {
-        id: "jazzcash",
-        name: "JazzCash",
-        description: "Pay using JazzCash",
-        icon: WalletCards,
-    },
-    {
-        id: "bank",
-        name: "Bank Transfer",
-        description: "Direct bank transfer",
-        icon: Building2,
-    },
-];
+const getMethodIcon = (
+    type
+) => {
+    if (
+        type ===
+        "mobile_wallet"
+    ) {
+        return Smartphone;
+    }
+
+    if (
+        type ===
+        "bank"
+    ) {
+        return Building2;
+    }
+
+    return CreditCard;
+};
 
 const PaymentMethods = ({
     selectedMethod,
     onSelectMethod,
+    paymentMethods = [],
+    loading = false,
+    error = "",
 }) => {
     return (
-        <div className="rounded-md border border-[#e5e7eb] bg-white p-5">
+        <div className="rounded-md border border-[#e5e7eb] bg-light-blue p-5">
             {/* Header */}
             <div className="mb-4">
                 <h2 className="text-[16px] font-medium text-[#252525]">
@@ -42,65 +45,114 @@ const PaymentMethods = ({
                 </p>
             </div>
 
+            {/* Loading */}
+            {loading && (
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                    <div className="h-[112px] animate-pulse rounded-md border border-light-azure bg-light-blue" />
+                    <div className="h-[112px] animate-pulse rounded-md border border-light-azure bg-light-blue" />
+                    <div className="h-[112px] animate-pulse rounded-md border border-light-azure bg-light-blue" />
+                </div>
+            )}
+
+            {/* Error */}
+            {!loading && error && (
+                <div className="rounded-md border border-red-200 bg-red-50 px-3 py-3 text-xs text-red-600">
+                    {error}
+                </div>
+            )}
+
+            {/* No Methods */}
+            {!loading &&
+                !error &&
+                paymentMethods.length ===
+                0 && (
+                    <div className="rounded-md border border-light-azure bg-light-blue px-3 py-4 text-xs text-dark-gray">
+                        No payment methods are currently available.
+                    </div>
+                )}
+
             {/* Methods */}
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-                {PAYMENT_METHODS.map((method) => {
-                    const selected =
-                        selectedMethod === method.id;
+            {!loading &&
+                !error &&
+                paymentMethods.length >
+                0 && (
+                    <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                        {paymentMethods.map(
+                            (method) => {
+                                const selected =
+                                    selectedMethod ===
+                                    method.key;
 
-                    const Icon = method.icon;
+                                const Icon =
+                                    getMethodIcon(
+                                        method.type
+                                    );
 
-                    return (
-                        <button
-                            key={method.id}
-                            type="button"
-                            onClick={() =>
-                                onSelectMethod(method.id)
+                                return (
+                                    <button
+                                        key={
+                                            method._id ||
+                                            method.key
+                                        }
+                                        type="button"
+                                        onClick={() =>
+                                            onSelectMethod(
+                                                method.key
+                                            )
+                                        }
+                                        className={`cursor-pointer flex flex-col min-w-0  gap-3 rounded-md border text-left transition-all ${selected
+                                            ? "border-primary-blue"
+                                            : "border-light-azure bg-light-blue hover:border-primary-blue/40 hover:bg-primary-blue/1"
+                                            }`}
+                                    >
+                                        {/* Radio */}
+                                        <div
+                                            className={`mx-3 mt-3 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${selected
+                                                ? "border-primary-blue"
+                                                : "border-light-azure"
+                                                }`}
+                                        >
+                                            {selected && (
+                                                <div className="h-2 w-2 rounded-full bg-primary-blue" />
+                                            )}
+                                        </div>
+
+                                        <div className="flex gap-3 px-2.5 pb-4.5 items-center">
+                                            {/* Icon */}
+                                            <div
+                                                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md ${selected
+                                                    ? "bg-light-blue text-primary-blue"
+                                                    : "bg-light-blue text-dark-gray"
+                                                    }`}
+                                            >
+                                                <Icon size={19} />
+                                            </div>
+
+                                            {/* Content */}
+                                            <div className="min-w-0 flex-1">
+                                                <p className="truncate text-sm font-medium text-dark-blue">
+                                                    {
+                                                        method.name
+                                                    }
+                                                </p>
+
+                                                <p className=" truncate text-[11px] text-dark-gray">
+                                                    {method.type ===
+                                                        "bank"
+                                                        ? "Direct bank transfer"
+                                                        : method.type ===
+                                                            "mobile_wallet"
+                                                            ? `Pay using ${method.name}`
+                                                            : `Pay using ${method.name}`}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </button>
+                                );
                             }
-                            className={`cursor-pointer flex flex-col min-w-0  gap-3 rounded-md border text-left transition-all ${selected
-                                ? "border-[#fa6c0a] bg-[#fff8f2]"
-                                : "border-[#dfe2e5] bg-white hover:border-[#fa6c0a]/40 hover:bg-[#fffaf6]"
-                                }`}
-                        >
-                            {/* Radio */}
-                            <div
-                                className={`mx-3 mt-3 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${selected
-                                    ? "border-[#fa6c0a]"
-                                    : "border-[#c8ccd0]"
-                                    }`}
-                            >
-                                {selected && (
-                                    <div className="h-2 w-2 rounded-full bg-[#fa6c0a]" />
-                                )}
-                            </div>
-                            <div className="flex gap-3 px-2.5 pb-4.5 items-center">
-                                {/* Icon */}
-                                <div
-                                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${selected
-                                        ? "bg-[#fff0e5] text-[#fa6c0a]"
-                                        : "bg-[#f5f6f8] text-[#7b8497]"
-                                        }`}
-                                >
-                                    <Icon size={19} />
-                                </div>
-
-                                {/* Content */}
-                                <div className="min-w-0 flex-1">
-                                    <p className="truncate text-sm font-medium text-[#172033]">
-                                        {method.name}
-                                    </p>
-
-                                    <p className=" truncate text-[11px] text-[#8a93a5]">
-                                        {method.description}
-                                    </p>
-                                </div>
-
-                            </div>
-
-                        </button>
-                    );
-                })}
-            </div>
+                        )}
+                    </div>
+                )}
         </div>
     );
 };

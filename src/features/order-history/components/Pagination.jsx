@@ -1,4 +1,4 @@
-import React from "react";
+
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const Pagination = ({
@@ -20,29 +20,52 @@ const Pagination = ({
     );
 
     return (
-        <div className="flex flex-col gap-3 border-t border-[#e5e7eb] py-4 sm:flex-row sm:items-center sm:justify-between">
-
+        <div
+            className="
+                flex
+                min-w-0
+                flex-col
+                gap-3
+                border-t
+                border-light-azure
+                py-3
+                sm:py-4
+                md:flex-row
+                md:items-center
+                md:justify-between
+            "
+        >
             {/* Result Info */}
-            <p className="text-[11px] text-[#4b5563]">
+
+            <p className="text-[10px] text-dark-gray sm:text-[11px]">
                 Showing{" "}
-                <span className="font-medium text-[#4b5563]">
+                <span className="font-medium text-dark-gray">
                     {startItem}
                 </span>
                 {" - "}
-                <span className="font-medium text-[#4b5563]">
+                <span className="font-medium text-dark-gray">
                     {endItem}
                 </span>
                 {" of "}
-                <span className="font-medium text-[#4b5563]">
+                <span className="font-medium text-dark-gray">
                     {totalItems}
                 </span>
                 {" orders"}
             </p>
 
+            {/* Controls */}
 
-            <div className="flex items-center gap-2">
-
+            <div
+                className="
+                    flex
+                    min-w-0
+                    items-center
+                    gap-1.5
+                    sm:gap-2
+                "
+            >
                 {/* Items Per Page */}
+
                 <select
                     value={itemsPerPage}
                     onChange={(e) =>
@@ -50,13 +73,20 @@ const Pagination = ({
                     }
                     className="
                         h-8
+                        min-w-0
+                        cursor-pointer
                         rounded-md
-                        border border-[#e5e7eb]
-                        bg-white
-                        px-2
-                        text-[11px]
-                        text-[#374151]
+                        border
+                        border-light-azure
+                        bg-light-blue
+                        px-1.5
+                        text-[10px]
+                        text-dark-gray
                         outline-none
+                        transition
+                        focus:ring-dark-blue/20
+                        sm:px-2
+                        sm:text-[11px]
                     "
                 >
                     <option value="5">
@@ -76,9 +106,10 @@ const Pagination = ({
                     </option>
                 </select>
 
-
                 {/* Previous */}
+
                 <button
+                    type="button"
                     onClick={() =>
                         changePage(currentPage - 1)
                     }
@@ -87,57 +118,88 @@ const Pagination = ({
                         flex
                         h-8
                         w-8
+                        shrink-0
+                        cursor-pointer
                         items-center
                         justify-center
                         rounded-md
-                        border border-[#e5e7eb]
-                        text-[#6b7280]
-                        transition
+                        border
+                        border-light-azure
+                        text-dark-gray
+                        outline-none
+                        transition-colors
                         hover:bg-[#f9fafb]
                         disabled:cursor-not-allowed
                         disabled:opacity-40
+                        focus:outline-none
                     "
                 >
-                    <ChevronLeft size={14} />
+                    <ChevronLeft
+                        size={14}
+                        strokeWidth={1.8}
+                    />
                 </button>
 
+                {/* Current Page */}
 
-                {/* Page */}
-                <div className="flex h-8 min-w-8 items-center justify-center rounded-md bg-[#fa6c0a] px-2 text-[11px] font-medium text-white">
+                <div
+                    className="
+                        flex
+                        h-8
+                        min-w-8
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-md
+                        bg-primary-blue
+                        px-2
+                        text-[11px]
+                        font-medium
+                        text-light-blue
+                    "
+                >
                     {currentPage}
                 </div>
 
-
                 {/* Next */}
+
                 <button
+                    type="button"
                     onClick={() =>
                         changePage(currentPage + 1)
                     }
                     disabled={
-                        currentPage === totalPages
+                        currentPage === totalPages ||
+                        totalPages === 0
                     }
                     className="
                         flex
                         h-8
                         w-8
+                        shrink-0
+                        cursor-pointer
                         items-center
                         justify-center
                         rounded-md
-                        border border-[#e5e7eb]
-                        text-[#6b7280]
-                        transition
+                        border
+                        border-light-azure
+                        text-dark-gray
+                        outline-none
+                        transition-colors
                         hover:bg-[#f9fafb]
                         disabled:cursor-not-allowed
                         disabled:opacity-40
+                        focus:outline-none
                     "
                 >
-                    <ChevronRight size={14} />
+                    <ChevronRight
+                        size={14}
+                        strokeWidth={1.8}
+                    />
                 </button>
-
             </div>
-
         </div>
     );
 };
 
-export default Pagination;
+export default Pagination

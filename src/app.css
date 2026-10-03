@@ -12,3 +12,25 @@ li {
     width: 0;
     height: 0;
 }
+
+.recharts-wrapper,
+.recharts-surface,
+.recharts-wrapper:focus,
+.recharts-surface:focus {
+    outline: none !important;
+}
+
+
+@theme {
+    --color-bg: #eff1f3;
+    --color-dark-blue: #0c0d10;
+    --color-light-blue: #f9fafb;
+    /* --color-light-blue: #f6f7fa; */
+    --color-light-azure: #dee2e7;
+    --color-gray-blue: #697180;
+    --color-gray: #767b80;
+    --color-dark-gray: #646668;
+    --color-light-gray: #f1f2f2;
+    /* --color-primary-blue: #4980f7; */
+    --color-primary-blue: #0c0d10;
+}

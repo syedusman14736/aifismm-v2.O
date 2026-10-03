@@ -1,4 +1,3 @@
-import React from "react";
 import { RefreshCw, Search } from "lucide-react";
 
 const OrderFilters = ({
@@ -22,90 +21,208 @@ const OrderFilters = ({
     resetFilters,
 }) => {
     return (
-        <div className="rounded-md bg-white">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
-
+        <div className="min-w-0 rounded-md">
+            <div
+                className="
+                    grid
+                    min-w-0
+                    grid-cols-1
+                    gap-2
+                    sm:grid-cols-2
+                    sm:gap-2.5
+                    lg:grid-cols-5
+                    lg:gap-3
+                "
+            >
                 {/* Search */}
-                <div className="relative">
+
+                <div className="relative min-w-0">
                     <Search
                         size={15}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9ca3af]"
+                        strokeWidth={1.8}
+                        className="
+                            pointer-events-none
+                            absolute
+                            left-3
+                            top-1/2
+                            -translate-y-1/2
+                            text-dark-gray
+                        "
                     />
 
                     <input
                         type="text"
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={(e) =>
+                            setSearch(e.target.value)
+                        }
                         placeholder="Search Order ID / Link"
-                        className="w-full h-9 pl-9 pr-3 rounded-md border border-[#e5e7eb] text-xs text-[#111827] outline-none focus:border-[#111827]"
+                        className="
+                            h-9
+                            w-full
+                            min-w-0
+                            rounded-md
+                            border
+                            border-light-azure
+                            bg-light-blue
+                            pl-9
+                            pr-3
+                            text-xs
+                            text-dark-gray
+                            outline-none
+                            placeholder:text-dark-gray
+                            transition
+                            focus:border-dark-blue/20
+                        "
                     />
                 </div>
 
-                {/* Status */}
-                {/* <select
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                    className="h-9 px-3 rounded-md border border-[#e5e7eb] text-xs text-[#374151] outline-none bg-white"
-                >
-                    {statuses.map((item) => (
-                        <option key={item} value={item}>
-                            {item === "All" ? "All Status" : item}
-                        </option>
-                    ))}
-                </select> */}
-
                 {/* Platform */}
-                <select
-                    value={platform}
-                    onChange={(e) => setPlatform(e.target.value)}
-                    className="h-9 px-3 rounded-md border border-[#e5e7eb] text-xs text-[#374151] outline-none bg-white"
-                >
-                    {platforms.map((item) => (
-                        <option key={item} value={item}>
-                            {item === "All" ? "All Platforms" : item}
-                        </option>
-                    ))}
-                </select>
+
+                <div className="min-w-0">
+                    <select
+                        value={platform}
+                        onChange={(e) =>
+                            setPlatform(e.target.value)
+                        }
+                        className="
+                            h-9
+                            w-full
+                            min-w-0
+                            rounded-md
+                            border
+                            border-light-azure
+                            bg-light-blue
+                            px-3
+                            text-xs
+                            text-dark-gray
+                            outline-none
+                            transition
+                            focus:border-dark-blue/20
+                        "
+                    >
+                        {platforms.map((item) => (
+                            <option
+                                key={item}
+                                value={item}
+                            >
+                                {item === "All"
+                                    ? "All Platforms"
+                                    : item}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
                 {/* Category */}
-                <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="h-9 px-3 rounded-md border border-[#e5e7eb] text-xs text-[#374151] outline-none bg-white"
-                >
-                    {categories.map((item) => (
-                        <option key={item} value={item}>
-                            {item === "All" ? "All Categories" : item}
-                        </option>
-                    ))}
-                </select>
+
+                <div className="min-w-0">
+                    <select
+                        value={category}
+                        onChange={(e) =>
+                            setCategory(e.target.value)
+                        }
+                        className="
+                            h-9
+                            w-full
+                            min-w-0
+                            rounded-md
+                            border
+                            border-light-azure
+                            bg-light-blue
+                            px-3
+                            text-xs
+                            text-dark-gray
+                            outline-none
+                            transition
+                            focus:border-dark-blue/20
+                        "
+                    >
+                        {categories.map((item) => (
+                            <option
+                                key={item}
+                                value={item}
+                            >
+                                {item === "All"
+                                    ? "All Categories"
+                                    : item}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
                 {/* Date */}
-                <select
-                    value={dateRange}
-                    onChange={(e) => setDateRange(e.target.value)}
-                    className="h-9 px-3 rounded-md border border-[#e5e7eb] text-xs text-[#374151] outline-none bg-white"
-                >
-                    {dateRanges.map((item) => (
-                        <option key={item} value={item}>
-                            {item === "All" ? "All Dates" : item}
-                        </option>
-                    ))}
-                </select>
 
+                <div className="min-w-0">
+                    <select
+                        value={dateRange}
+                        onChange={(e) =>
+                            setDateRange(e.target.value)
+                        }
+                        className="
+                            h-9
+                            w-full
+                            min-w-0
+                            rounded-md
+                            border
+                            border-light-azure
+                            bg-light-blue
+                            px-3
+                            text-xs
+                            text-dark-gray
+                            outline-none
+                            transition
+                            focus:border-dark-blue/20
+                        "
+                    >
+                        {dateRanges.map((item) => (
+                            <option
+                                key={item}
+                                value={item}
+                            >
+                                {item === "All"
+                                    ? "All Dates"
+                                    : item}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Reset */}
 
                 <button
                     type="button"
                     onClick={resetFilters}
-                    className="h-9 px-3 inline-flex items-center gap-2 h-8 px-3 rounded-md border border-[#e5e7eb] text-xs text-[#374151] hover:bg-[#f9fafb] transition"
+                    className="
+                        inline-flex
+                        h-9
+                        w-full
+                        cursor-pointer
+                        items-center
+                        justify-center
+                        gap-2
+                        rounded-md
+                        border
+                        border-light-azure
+                        bg-light-blue
+                        px-3
+                        text-xs
+                        text-dark-gray
+                        outline-none
+                        transition-colors
+                        hover:bg-[#f9fafb]
+                        focus:outline-none
+                        sm:w-full
+                    "
                 >
-                    <RefreshCw size={13} />
-                    Reset Filters
+                    <RefreshCw
+                        size={13}
+                        strokeWidth={1.8}
+                    />
+
+                    <span>Reset Filters</span>
                 </button>
             </div>
-
-            {/* Bottom row */}
-
         </div>
     );
 };

@@ -1,0 +1,40 @@
+
+src/pages/admin/
+│
+├── AdminLayout.jsx
+├── AdminSidebar.jsx
+├── AdminTopbar.jsx
+│
+├── Dashboard/
+│   └── AdminDashboard.jsx
+│
+├── Services/
+│   ├── AdminServices.jsx
+│   └── ServiceModal.jsx
+│
+├── Providers/
+│   ├── AdminProviders.jsx
+│   └── ProviderModal.jsx
+│
+├── Platforms/
+│   ├── AdminPlatforms.jsx
+│   └── PlatformModal.jsx
+│
+├── Orders/
+│   ├── AdminOrders.jsx
+│   └── OrderModal.jsx
+│
+├── Users/
+│   ├── AdminUsers.jsx
+│   └── UserModal.jsx
+│
+├── Payments/
+│   ├── AdminPayments.jsx
+│   └── PaymentModal.jsx
+│
+├── Tickets/
+│   ├── AdminTickets.jsx
+│   └── TicketModal.jsx
+│
+└── Settings/
+    └── AdminSettings.jsx

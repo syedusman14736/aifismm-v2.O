@@ -1,318 +1,264 @@
-export const SERVICES = [
-    // ==========================================
-    // INSTAGRAM - CHEAP
-    // ==========================================
+import mongoose from "mongoose";
 
+// ==========================================
+// SERVICE SCHEMA
+// ==========================================
+
+const serviceSchema = new mongoose.Schema(
     {
-        id: 1,
-        platform: "instagram",
-        category: "cheap",
+        // ======================================
+        // PROVIDER MAPPING
+        // ======================================
 
-        name: "Instagram Followers",
-        type: "followers",
-
-        rate: 20,
-        min: 100,
-        max: 100000,
-
-        speed: "0-6 Hours",
-        drop: "Low",
-        quality: "Good",
-
-        refill: {
-            enabled: false,
-            duration: null,
+        provider: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Provider",
+            required: true,
+            index: true,
         },
 
-        refund: false,
-    },
-
-    {
-        id: 2,
-        platform: "instagram",
-        category: "cheap",
-
-        name: "Instagram Likes",
-        type: "likes",
-
-        rate: 15,
-        min: 100,
-        max: 50000,
-
-        speed: "0-4 Hours",
-        drop: "Low",
-        quality: "Good",
-
-        refill: {
-            enabled: false,
-            duration: null,
+        providerServiceId: {
+            type: String,
+            required: true,
+            trim: true,
         },
 
-        refund: false,
-    },
+        // ======================================
+        // AIFI SERVICE ID
+        // ======================================
 
-    {
-        id: 3,
-        platform: "instagram",
-        category: "cheap",
-
-        name: "Instagram Views",
-        type: "views",
-
-        rate: 5,
-        min: 100,
-        max: 1000000,
-
-        speed: "0-2 Hours",
-        drop: "Very Low",
-        quality: "Good",
-
-        refill: {
-            enabled: false,
-            duration: null,
+        serviceId: {
+            type: Number,
+            unique: true,
+            index: true,
         },
 
-        refund: false,
-    },
+        // ======================================
+        // SERVICE BASIC INFO
+        // ======================================
 
-
-    // ==========================================
-    // INSTAGRAM - REFILL
-    // ==========================================
-
-    {
-        id: 4,
-        platform: "instagram",
-        category: "refill",
-
-        name: "Instagram Followers - 30 Days Refill",
-        type: "followers",
-
-        rate: 45,
-        min: 100,
-        max: 100000,
-
-        speed: "0-12 Hours",
-        drop: "Very Low",
-        quality: "High",
-
-        refill: {
-            enabled: true,
-            duration: "30_days",
+        name: {
+            type: String,
+            required: true,
+            trim: true,
         },
 
-        refund: false,
-    },
-
-
-    // ==========================================
-    // INSTAGRAM - REFUND
-    // ==========================================
-
-    {
-        id: 5,
-        platform: "instagram",
-        category: "refund",
-
-        name: "Instagram Followers - Refill + Refund",
-        type: "followers",
-
-        rate: 60,
-        min: 100,
-        max: 100000,
-
-        speed: "0-12 Hours",
-        drop: "Low",
-        quality: "Premium",
-
-        refill: {
-            enabled: true,
-            duration: "30_days",
+        description: {
+            type: String,
+            default: null,
+            trim: true,
         },
 
-        refund: true,
-    },
+        // ======================================
+        // AIFI SERVICE TYPE
+        // ======================================
+        // Example:
+        // followers
+        // likes
+        // views
+        // comments
+        // shares
+        // saves
 
-
-    // ==========================================
-    // TIKTOK - CHEAP
-    // ==========================================
-
-    {
-        id: 6,
-        platform: "tiktok",
-        category: "cheap",
-
-        name: "TikTok Followers",
-        type: "followers",
-
-        rate: 25,
-        min: 100,
-        max: 100000,
-
-        speed: "0-6 Hours",
-        drop: "Low",
-        quality: "Good",
-
-        refill: {
-            enabled: false,
-            duration: null,
+        type: {
+            type: String,
+            default: null,
+            trim: true,
+            lowercase: true,
         },
 
-        refund: false,
-    },
+        // ======================================
+        // AIFI PLATFORM
+        // ======================================
+        // Example:
+        // instagram
+        // tiktok
+        // youtube
+        // facebook
 
-    {
-        id: 7,
-        platform: "tiktok",
-        category: "cheap",
-
-        name: "TikTok Likes",
-        type: "likes",
-
-        rate: 10,
-        min: 100,
-        max: 50000,
-
-        speed: "0-4 Hours",
-        drop: "Low",
-        quality: "Good",
-
-        refill: {
-            enabled: false,
-            duration: null,
+        platform: {
+            type: String,
+            default: null,
+            trim: true,
+            lowercase: true,
         },
 
-        refund: false,
-    },
+        // ======================================
+        // AIFI SERVICE CATEGORY
+        // ======================================
+        //
+        // cheap
+        // refill
+        // refund
 
-    {
-        id: 8,
-        platform: "tiktok",
-        category: "cheap",
-
-        name: "TikTok Views",
-        type: "views",
-
-        rate: 3,
-        min: 100,
-        max: 1000000,
-
-        speed: "0-2 Hours",
-        drop: "Low",
-        quality: "Good",
-
-        refill: {
-            enabled: false,
-            duration: null,
+        category: {
+            type: String,
+            enum: [
+                "cheap",
+                "refill",
+                "refund",
+            ],
+            default: "cheap",
         },
 
-        refund: false,
-    },
+        // ======================================
+        // AIFI SELLING RATE
+        // ======================================
 
-
-    // ==========================================
-    // YOUTUBE - CHEAP
-    // ==========================================
-
-    {
-        id: 9,
-        platform: "youtube",
-        category: "cheap",
-
-        name: "YouTube Views",
-        type: "views",
-
-        rate: 30,
-        min: 100,
-        max: 1000000,
-
-        speed: "0-12 Hours",
-        drop: "Low",
-        quality: "Good",
-
-        refill: {
-            enabled: false,
-            duration: null,
+        rate: {
+            type: Number,
+            required: true,
+            min: 0,
         },
 
-        refund: false,
-    },
+        // ======================================
+        // ORDER LIMITS
+        // ======================================
 
-    {
-        id: 10,
-        platform: "youtube",
-        category: "cheap",
-
-        name: "YouTube Likes",
-        type: "likes",
-
-        rate: 40,
-        min: 100,
-        max: 50000,
-
-        speed: "0-12 Hours",
-        drop: "Low",
-        quality: "Good",
-
-        refill: {
-            enabled: false,
-            duration: null,
+        min: {
+            type: Number,
+            required: true,
+            min: 1,
         },
 
-        refund: false,
-    },
-
-
-    // ==========================================
-    // FACEBOOK - CHEAP
-    // ==========================================
-
-    {
-        id: 11,
-        platform: "facebook",
-        category: "cheap",
-
-        name: "Facebook Followers",
-        type: "followers",
-
-        rate: 20,
-        min: 100,
-        max: 100000,
-
-        speed: "0-6 Hours",
-        drop: "Low",
-        quality: "Good",
-
-        refill: {
-            enabled: false,
-            duration: null,
+        max: {
+            type: Number,
+            required: true,
+            min: 1,
         },
 
-        refund: false,
-    },
+        // ======================================
+        // AIFI SERVICE INFORMATION
+        // ======================================
 
-    {
-        id: 12,
-        platform: "facebook",
-        category: "cheap",
-
-        name: "Facebook Likes",
-        type: "likes",
-
-        rate: 15,
-        min: 100,
-        max: 50000,
-
-        speed: "0-6 Hours",
-        drop: "Low",
-        quality: "Good",
-
-        refill: {
-            enabled: false,
-            duration: null,
+        speed: {
+            type: String,
+            default: null,
+            trim: true,
         },
 
-        refund: false,
+        drop: {
+            type: String,
+            default: null,
+            trim: true,
+        },
+
+        quality: {
+            type: String,
+            default: null,
+            trim: true,
+        },
+
+        // ======================================
+        // REFILL
+        // ======================================
+
+        refill: {
+            enabled: {
+                type: Boolean,
+                default: false,
+            },
+
+            duration: {
+                type: String,
+                default: null,
+            },
+        },
+
+        // ======================================
+        // REFUND
+        // ======================================
+
+        refund: {
+            type: Boolean,
+            default: false,
+        },
+
+        // ======================================
+        // PROVIDER INFORMATION
+        // ======================================
+
+        providerType: {
+            type: String,
+            default: null,
+            trim: true,
+        },
+
+        providerCategory: {
+            type: String,
+            default: null,
+            trim: true,
+        },
+
+        providerRate: {
+            type: Number,
+            required: true,
+            min: 0,
+        },
+
+        // ======================================
+        // PROVIDER CAPABILITIES
+        // ======================================
+
+        dripfeed: {
+            type: Boolean,
+            default: false,
+        },
+
+        cancel: {
+            type: Boolean,
+            default: false,
+        },
+
+        // ======================================
+        // PROVIDER AVERAGE TIME
+        // ======================================
+
+        averageTime: {
+            type: Number,
+            default: null,
+            min: 0,
+        },
+
+        // ======================================
+        // SERVICE STATUS
+        // ======================================
+
+        status: {
+            type: String,
+            enum: [
+                "active",
+                "inactive",
+            ],
+            default: "active",
+        },
     },
-];
+    {
+        timestamps: true,
+    }
+);
+
+// ==========================================
+// UNIQUE PROVIDER SERVICE
+// ==========================================
+
+serviceSchema.index(
+    {
+        provider: 1,
+        providerServiceId: 1,
+    },
+    {
+        unique: true,
+    }
+);
+
+// ==========================================
+// MODEL
+// ==========================================
+
+const Service = mongoose.model(
+    "Service",
+    serviceSchema
+);
+
+export default Service;

@@ -6,7 +6,7 @@ const StatusTabs = ({
     statuses,
 }) => {
     return (
-        <div className="flex gap-1 overflow-x-auto border-b border-[#e5e7eb] pt-3 hide-scrollbar">
+        <div className="flex gap-1 overflow-x-auto border-b border-light-azure pt-3 hide-scrollbar">
 
             {statuses.map((item) => {
 
@@ -24,10 +24,10 @@ const StatusTabs = ({
                             text-xs
                             font-medium
                             transition
-
+                            cursor-pointer
                             ${isActive
-                                ? "border-[#fa6c0a] text-[#fa6c0a]"
-                                : "border-transparent text-[#6b7280] hover:text-[#fa6c0a]"
+                                ? "border-primary-blue text-primary-blue"
+                                : "border-transparent text-dark-gray hover:text-primary-blue"
                             }
                         `}
                     >

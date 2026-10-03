@@ -1,3 +1,6 @@
+
+import { useEffect, useMemo, useState } from "react";
+
 import {
     ResponsiveContainer,
     AreaChart,
@@ -7,119 +10,380 @@ import {
     CartesianGrid,
     Tooltip,
 } from "recharts";
-import { ChevronDown } from "lucide-react";
 
+import { useCurrency } from "../../context/CurrencyContext";
 
+const API_URL =
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:4040/api";
 
 export default function RevenueChart() {
+    const {
+        currency: selectedCurrency,
+        convertFromUSD,
+        formatCurrency,
+    } = useCurrency();
 
-    const chartData = [
-        { date: "Jul 21", revenue: 42000 },
-        { date: "Jul 22", revenue: 51000 },
-        { date: "Jul 23", revenue: 45000 },
-        { date: "Jul 24", revenue: 47000 },
-        { date: "Jul 25", revenue: 50000 },
-        { date: "Jul 26", revenue: 54000 },
-        { date: "Jul 27", revenue: 48000 },
-        { date: "Jul 28", revenue: 49000 },
-        { date: "Jul 29", revenue: 55000 },
-        { date: "Jul 30", revenue: 52000 },
-        { date: "Jul 31", revenue: 58000 },
-        { date: "Aug 01", revenue: 53000 },
-        { date: "Aug 02", revenue: 60000 },
-        { date: "Aug 03", revenue: 55000 },
-        { date: "Aug 04", revenue: 62000 },
-        { date: "Aug 05", revenue: 58000 },
-        { date: "Aug 06", revenue: 64000 },
-        { date: "Aug 07", revenue: 72000 },
-        { date: "Aug 08", revenue: 65000 },
-        { date: "Aug 09", revenue: 78000 },
-        { date: "Aug 10", revenue: 74000 },
-        { date: "Aug 11", revenue: 82000 },
-        { date: "Aug 12", revenue: 68000 },
-        { date: "Aug 13", revenue: 75000 },
-        { date: "Aug 14", revenue: 63000 },
-        { date: "Aug 15", revenue: 88000 },
-        { date: "Aug 16", revenue: 85000 },
-        { date: "Aug 17", revenue: 92000 },
-        { date: "Aug 18", revenue: 95000 },
-        { date: "Aug 19", revenue: 97000 },
-        { date: "Aug 20", revenue: 110000 },
-    ];
+    const [chartData, setChartData] = useState([]);
+    const [totalSpending, setTotalSpending] = useState(0);
+    const [percentageChange, setPercentageChange] = useState(0);
+    const [loading, setLoading] = useState(true);
 
-    const formatCurrency = (value) => {
-        return `PKR ${value.toLocaleString()}`;
-    };
+    // ==========================================
+    // FETCH SPENDING DATA
+    // ==========================================
 
-    const CustomTooltip = ({ active, payload, label }) => {
-        if (!active || !payload?.length) return null;
+    useEffect(() => {
+        const fetchSpending = async () => {
+            try {
+                const token =
+                    localStorage.getItem("aifi_token");
+
+                if (!token) {
+                    setLoading(false);
+                    return;
+                }
+
+                const response = await fetch(
+                    `${API_URL}/dashboard/spending`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(
+                        data.message ||
+                        "Unable to fetch spending data."
+                    );
+                }
+
+                setChartData(
+                    data.spending?.chartData || []
+                );
+
+                // Backend amount is USD
+                setTotalSpending(
+                    Number(data.spending?.total || 0)
+                );
+
+                setPercentageChange(
+                    Number(
+                        data.spending?.percentageChange || 0
+                    )
+                );
+            } catch (error) {
+                console.error(
+                    "Fetch Spending Error:",
+                    error
+                );
+
+                setChartData([]);
+                setTotalSpending(0);
+                setPercentageChange(0);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSpending();
+    }, []);
+
+    // ==========================================
+    // CONVERT CHART DATA
+    // USD -> SELECTED CURRENCY
+    // ==========================================
+
+    const convertedChartData = useMemo(() => {
+        return chartData.map((item) => ({
+            ...item,
+            spending: convertFromUSD(
+                Number(item.spending) || 0
+            ),
+        }));
+    }, [
+        chartData,
+        convertFromUSD,
+        selectedCurrency,
+    ]);
+
+    // ==========================================
+    // DYNAMIC Y-AXIS
+    // ==========================================
+
+    const maxSpending = convertedChartData.length
+        ? Math.max(
+            ...convertedChartData.map(
+                (item) =>
+                    Number(item.spending) || 0
+            )
+        )
+        : 0;
+
+    const getYAxisMax = (value) => {
+        if (value <= 0) {
+            return 1;
+        }
+
+        if (value < 0.01) {
+            return Math.ceil(value * 1000) / 1000;
+        }
+
+        if (value < 0.1) {
+            return Math.ceil(value * 100) / 100;
+        }
+
+        if (value < 1) {
+            return Math.ceil(value * 10) / 10;
+        }
+
+        if (value <= 10) {
+            return Math.ceil(value);
+        }
+
+        if (value <= 100) {
+            return Math.ceil(value / 10) * 10;
+        }
+
+        if (value <= 500) {
+            return 500;
+        }
+
+        if (value <= 1000) {
+            return 1000;
+        }
+
+        if (value <= 5000) {
+            return (
+                Math.ceil(value / 1000) * 1000
+            );
+        }
+
+        if (value <= 10000) {
+            return (
+                Math.ceil(value / 2000) * 2000
+            );
+        }
+
+        if (value <= 50000) {
+            return (
+                Math.ceil(value / 10000) * 10000
+            );
+        }
+
+        if (value <= 100000) {
+            return (
+                Math.ceil(value / 20000) * 20000
+            );
+        }
+
+        if (value <= 500000) {
+            return (
+                Math.ceil(value / 100000) * 100000
+            );
+        }
+
+        if (value <= 1000000) {
+            return (
+                Math.ceil(value / 200000) * 200000
+            );
+        }
 
         return (
-            <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-xl">
-                <p className="text-sm font-semibold text-slate-800">
-                    {formatCurrency(payload[0].value)}
+            Math.ceil(value / 1000000) * 1000000
+        );
+    };
+
+    const yAxisMax = getYAxisMax(maxSpending);
+
+    const formatYAxis = (value) => {
+        if (value === 0) {
+            return "0";
+        }
+
+        if (value >= 1000000) {
+            return `${Number(
+                (value / 1000000).toFixed(1)
+            )}M`;
+        }
+
+        if (value >= 1000) {
+            return `${Number(
+                (value / 1000).toFixed(1)
+            )}k`;
+        }
+
+        if (value < 1) {
+            return Number(
+                value.toFixed(6)
+            ).toString();
+        }
+
+        return value.toLocaleString("en-PK");
+    };
+
+    // ==========================================
+    // FORMAT CHART CURRENCY
+    // ==========================================
+
+    const formatChartCurrency = (value) => {
+        const number = Number(value);
+
+        if (!Number.isFinite(number)) {
+            return `${selectedCurrency?.symbol || "$"} 0`;
+        }
+
+        let precision = 2;
+
+        if (number < 1) {
+            precision = 8;
+        } else if (number < 100) {
+            precision = 2;
+        }
+
+        const formatted = number
+            .toFixed(precision)
+            .replace(/\.?0+$/, "");
+
+        return `${selectedCurrency?.symbol || "$"} ${formatted}`;
+    };
+
+    // ==========================================
+    // CUSTOM TOOLTIP
+    // ==========================================
+
+    const CustomTooltip = ({
+        active,
+        payload,
+        label,
+    }) => {
+        if (!active || !payload?.length) {
+            return null;
+        }
+
+        return (
+            <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-xl sm:px-4 sm:py-3">
+                <p className="text-xs font-semibold text-slate-800 sm:text-sm">
+                    {formatChartCurrency(
+                        payload[0].value
+                    )}
                 </p>
 
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-[10px] text-slate-500 sm:text-xs">
                     {label}, 2026
                 </p>
             </div>
         );
     };
 
+    const isIncrease = percentageChange >= 0;
+
     return (
-        <div className="w-full flex flex-col flex-1 rounded-md border border-[#dfe2e5] px-4 py-3 ">
+        <div className="w-full min-w-0 rounded-md border border-light-azure bg-light-blue px-3 py-3 sm:px-4 sm:py-4">
 
             {/* Header */}
-            <div className="mb-6 flex items-start justify-between gap-4">
-                <div>
-                    <h2 className="text-sm  text-[#57595a]">
-                        Total Revenue Overview
+            <div className="mb-4 flex min-w-0 items-start justify-between gap-3 sm:mb-5">
+
+                <div className="min-w-0">
+
+                    <h2 className="text-xs text-dark-gray">
+                        Total Spending Overview
                     </h2>
 
-                    <div className="mt-4">
+                    <div className="mt-3 sm:mt-4">
 
-
-                        <h3 className="mt-1 text-2xl font-medium tracking-tight text-[#252525]">
-                            PKR 87,900
+                        <h3 className="text-xl font-medium tracking-tight text-[#252525] sm:text-2xl">
+                            {loading
+                                ? formatCurrency(0)
+                                : formatCurrency(
+                                    totalSpending
+                                )}
                         </h3>
 
-                        <p className=" text-xs text-[#57595a]">
-                            <span className="font-medium text-emerald-600">
-                                ↑ 15.6%
+                        <p className="text-[10px] text-dark-gray sm:text-xs">
+
+                            <span
+                                className={`font-medium ${isIncrease
+                                    ? "text-emerald-600"
+                                    : "text-red-500"
+                                    }`}
+                            >
+                                {isIncrease
+                                    ? "↑"
+                                    : "↓"}{" "}
+                                {Math.abs(
+                                    percentageChange
+                                ).toFixed(1)}
+                                %
                             </span>{" "}
-                            vs last 30 days
+
+                            vs previous 30 days
+
                         </p>
+
                     </div>
+
                 </div>
 
                 {/* Filter */}
                 <button
                     className="
-            flex items-center gap-2 rounded-md border border-[#dfe2e5]
-            bg-white px-3 py-2.5 text-xs font-medium text-[#57595a]
-            transition hover:bg-slate-50 cursor-pointer"
+                        shrink-0
+                        whitespace-nowrap
+                        rounded-md
+                        border
+                        border-[#dfe2e5]
+                        bg-white
+                        px-2.5
+                        py-2
+                        text-[10px]
+                        font-medium
+                        text-[#57595a]
+                        transition
+                        hover:bg-slate-50
+                        cursor-pointer
+                        sm:px-3
+                        sm:py-2.5
+                        sm:text-xs
+                    "
                 >
                     Last 30 days
-                    {/* <ChevronDown size={14} /> */}
                 </button>
+
             </div>
 
-            {/* Chart */}
-            <div className=" w-full flex-1">
-                <ResponsiveContainer width="100%" height="100%">
+            {/* Responsive Chart */}
+            <div className="w-full min-w-0 aspect-[1.45/1] sm:aspect-[2/1] lg:aspect-[2.5/1]">
+
+                <ResponsiveContainer
+                    width="100%"
+                    height="100%"
+                    className="outline-none focus:outline-none"
+                >
+
                     <AreaChart
-                        data={chartData}
+                        data={convertedChartData}
                         margin={{
-                            top: 15,
-                            right: 15,
-                            left: 0,
+                            top: 0,
+                            right: 0,
+                            left: 5,
                             bottom: 0,
                         }}
+                        style={{
+                            outline: "none",
+                        }}
                     >
+
+                        {/* Gradient */}
                         <defs>
                             <linearGradient
-                                id="revenueGradient"
+                                id="spendingGradient"
                                 x1="0"
                                 y1="0"
                                 x2="0"
@@ -127,51 +391,58 @@ export default function RevenueChart() {
                             >
                                 <stop
                                     offset="0%"
-                                    stopColor="#f97316"
+                                    stopColor="#4980f7"
                                     stopOpacity={0.22}
                                 />
 
                                 <stop
                                     offset="100%"
-                                    stopColor="#f97316"
+                                    stopColor="#4980f7"
                                     stopOpacity={0}
                                 />
                             </linearGradient>
                         </defs>
 
+                        {/* Grid */}
                         <CartesianGrid
                             vertical={false}
                             stroke="#e2e8f0"
                             strokeDasharray="4 6"
                         />
 
+                        {/* X Axis */}
                         <XAxis
                             dataKey="date"
                             axisLine={false}
                             tickLine={false}
                             tick={{
                                 fill: "#64748b",
-                                fontSize: 12,
+                                fontSize: 10,
                             }}
-                            interval={4}
-                            dy={10}
+                            interval="preserveStartEnd"
+                            minTickGap={20}
+                            padding={{
+                                left: 0,
+                                right: 0,
+                            }}
+                            dy={8}
                         />
 
+                        {/* Y Axis */}
                         <YAxis
                             axisLine={false}
                             tickLine={false}
-                            width={75}
+                            width={35}
+                            domain={[0, yAxisMax]}
                             tick={{
                                 fill: "#64748b",
-                                fontSize: 12,
+                                fontSize: 10,
                             }}
-                            tickFormatter={(value) => {
-                                if (value === 0) return "PKR 0K";
-
-                                return `PKR ${value / 1000}K`;
-                            }}
+                            tickFormatter={formatYAxis}
+                            tickCount={6}
                         />
 
+                        {/* Tooltip */}
                         <Tooltip
                             content={<CustomTooltip />}
                             cursor={{
@@ -181,28 +452,27 @@ export default function RevenueChart() {
                             }}
                         />
 
+                        {/* Spending Area */}
                         <Area
                             type="monotone"
-                            dataKey="revenue"
-                            stroke="#f97316"
-                            strokeWidth={0.8}
-                            fill="url(#revenueGradient)"
+                            dataKey="spending"
+                            stroke="#4980f7"
+                            strokeWidth={1.5}
+                            fill="url(#spendingGradient)"
                             activeDot={{
                                 r: 5,
-                                fill: "#f97316",
+                                fill: "#4980f7",
                                 stroke: "#ffffff",
                                 strokeWidth: 3,
                             }}
-                            dot={{
-                                r: 0,
-                                fill: "#ffffff",
-                                stroke: "#f97316",
-                                strokeWidth: 1,
-                            }}
                         />
+
                     </AreaChart>
+
                 </ResponsiveContainer>
+
             </div>
+
         </div>
     );
 }

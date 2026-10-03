@@ -1,9 +1,21 @@
+
 import React from "react";
+
 import { Eye } from "lucide-react";
+import { useCurrency } from "../../../context/CurrencyContext";
+
 
 const OrdersTable = ({ orders, onView }) => {
+
+    const {
+        formatCurrency,
+    } = useCurrency();
+
+
     const getStatusClasses = (status) => {
+
         switch (status) {
+
             case "Completed":
                 return "bg-green-50 text-green-700";
 
@@ -25,53 +37,56 @@ const OrdersTable = ({ orders, onView }) => {
         }
     };
 
+
     return (
-        <div className="mt-4 overflow-hidden  border-t border-l border-r border-[#e5e7eb]">
+
+        <div className="mt-4 overflow-hidden border-t border-l border-r border-light-azure">
 
             <div className="overflow-x-auto hide-scrollbar">
 
-                <table className="w-full min-w-[1000px] text-left ">
+                <table className="w-full min-w-[1000px] bg-light-blue text-left">
 
                     {/* Table Header */}
-                    <thead className="border-b border-[#e5e7eb] bg-[#f9fafb]">
 
-                        <tr className="text-[12px] text-[#6b7280]">
+                    <thead className="border-b border-light-azure">
 
-                            <th className="px-4 py-3">
+                        <tr className="text-[12px] text-dark-blue">
+
+                            <td className="px-4 py-3 font-medium">
                                 Order ID
-                            </th>
+                            </td>
 
-                            <th className="px-4 py-3">
+                            <td className="px-4 py-3 font-medium">
                                 Service
-                            </th>
+                            </td>
 
-                            <th className="px-4 py-3">
+                            <td className="px-4 py-3 font-medium">
                                 Platform
-                            </th>
+                            </td>
 
-                            <th className="px-4 py-3">
+                            <td className="px-4 py-3 font-medium">
                                 Category
-                            </th>
+                            </td>
 
-                            <th className="px-4 py-3">
+                            <td className="px-4 py-3 font-medium">
                                 Quantity
-                            </th>
+                            </td>
 
-                            <th className="px-4 py-3">
+                            <td className="px-4 py-3 font-medium">
                                 Charge
-                            </th>
+                            </td>
 
-                            <th className="px-4 py-3">
+                            <td className="px-4 py-3 font-medium">
                                 Status
-                            </th>
+                            </td>
 
-                            <th className="px-4 py-3">
+                            <td className="px-4 py-3 font-medium">
                                 Date
-                            </th>
+                            </td>
 
-                            <th className="px-4 py-3 text-right">
+                            <td className="px-4 py-3 text-center font-medium">
                                 Action
-                            </th>
+                            </td>
 
                         </tr>
 
@@ -79,6 +94,7 @@ const OrdersTable = ({ orders, onView }) => {
 
 
                     {/* Table Body */}
+
                     <tbody>
 
                         {orders.length > 0 ? (
@@ -86,43 +102,50 @@ const OrdersTable = ({ orders, onView }) => {
                             orders.map((order) => (
 
                                 <tr
-                                    key={order.id}
+                                    key={order.orderId}
                                     className="
                                         border-b
-                                        border-[#f0f0f0]
-                                        last:border-b-0
-                                        hover:bg-[#fafafa]
+                                        border-light-azure
+                                        hover:bg-light-blue
                                     "
                                 >
 
                                     {/* Order ID */}
+
                                     <td className="px-4 py-4">
 
-                                        <span className="text-xs font-semibold text-[#111827]">
-                                            #{order.id}
+                                        <span className="text-xs font-semibold text-dark-gray">
+                                            #{order.orderId}
                                         </span>
 
                                     </td>
 
 
                                     {/* Service */}
+
                                     <td className="max-w-[240px] px-4 py-4">
 
-                                        <p className="truncate text-xs font-medium text-[#374151]">
+                                        <p className="truncate text-xs font-medium text-dark-gray">
                                             {order.service}
                                         </p>
 
-                                        <p className="mt-1 truncate text-[10px] text-[#9ca3af]">
+                                        <a
+                                            href={order.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="mt-1 block truncate text-[10px] text-gray hover:text-dark-blue cursor-pointer"
+                                        >
                                             {order.link}
-                                        </p>
+                                        </a>
 
                                     </td>
 
 
                                     {/* Platform */}
+
                                     <td className="px-4 py-4">
 
-                                        <span className="text-xs text-[#4b5563]">
+                                        <span className="text-xs text-dark-gray">
                                             {order.platform}
                                         </span>
 
@@ -130,9 +153,10 @@ const OrdersTable = ({ orders, onView }) => {
 
 
                                     {/* Category */}
+
                                     <td className="px-4 py-4">
 
-                                        <span className="text-xs text-[#4b5563]">
+                                        <span className="text-xs text-dark-gray">
                                             {order.category}
                                         </span>
 
@@ -140,26 +164,39 @@ const OrdersTable = ({ orders, onView }) => {
 
 
                                     {/* Quantity */}
+
                                     <td className="px-4 py-4">
 
-                                        <span className="text-xs font-medium text-[#374151]">
-                                            {order.quantity.toLocaleString()}
+                                        <span className="text-xs font-medium text-dark-gray">
+
+                                            {Number(
+                                                order.quantity || 0
+                                            ).toLocaleString()}
+
                                         </span>
 
                                     </td>
 
 
                                     {/* Charge */}
+
                                     <td className="px-4 py-4">
 
-                                        <span className="text-xs text-[#111827]">
-                                            {order.currency} {order.charge}
+                                        <span className="text-xs text-dark-gray">
+
+                                            {formatCurrency(
+                                                Number(
+                                                    order.charge || 0
+                                                )
+                                            )}
+
                                         </span>
 
                                     </td>
 
 
                                     {/* Status */}
+
                                     <td className="px-4 py-4">
 
                                         <span
@@ -170,7 +207,9 @@ const OrdersTable = ({ orders, onView }) => {
                                                 py-1
                                                 text-[10px]
                                                 font-medium
-                                                ${getStatusClasses(order.status)}
+                                                ${getStatusClasses(
+                                                order.status
+                                            )}
                                             `}
                                         >
                                             {order.status}
@@ -180,41 +219,52 @@ const OrdersTable = ({ orders, onView }) => {
 
 
                                     {/* Date */}
+
                                     <td className="px-4 py-4">
 
                                         <span className="whitespace-nowrap text-xs text-[#6b7280]">
+
                                             {new Date(
                                                 order.createdAt
                                             ).toLocaleDateString()}
+
                                         </span>
 
                                     </td>
 
 
                                     {/* Action */}
+
                                     <td className="px-4 py-4 text-right">
 
                                         <button
-                                            onClick={() => onView(order)}
+                                            type="button"
+                                            onClick={() =>
+                                                onView(order)
+                                            }
                                             className="
                                                 inline-flex
                                                 items-center
                                                 gap-1.5
                                                 rounded-md
                                                 border
-                                                border-[#e5e7eb]
+                                                border-light-azure
                                                 px-2.5
                                                 py-1.5
                                                 text-[11px]
                                                 font-medium
-                                                text-[#374151]
+                                                text-dark-gray
                                                 transition
                                                 hover:bg-[#f9fafb]
-                                                hover:text-[#111827]
+                                                hover:text-dark-gray
+                                                cursor-pointer
                                             "
                                         >
+
                                             <Eye size={13} />
+
                                             View
+
                                         </button>
 
                                     </td>
@@ -232,11 +282,11 @@ const OrdersTable = ({ orders, onView }) => {
                                     className="px-4 py-14 text-center"
                                 >
 
-                                    <p className="text-sm font-medium text-[#374151]">
+                                    <p className="text-sm font-medium text-dark-gray">
                                         No orders found
                                     </p>
 
-                                    <p className="mt-1 text-xs text-[#9ca3af]">
+                                    <p className="mt-1 text-xs text-gray">
                                         Try changing your filters or search.
                                     </p>
 
@@ -253,6 +303,7 @@ const OrdersTable = ({ orders, onView }) => {
             </div>
 
         </div>
+
     );
 };
 

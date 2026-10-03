@@ -8,7 +8,7 @@ function CategoryCard({
     return (
         <button
             onClick={onClick}
-            className={`relative rounded-md border text-left transition ${selected
+            className={`w-full relative rounded-md border text-left transition ${selected
                 ? "border-[#fa6c0a] bg-[#fff9f5] ring-1 ring-[#fa6c0a]/20"
                 : "border-[#dfe2e5] bg-white hover:border-[#ffb27a]"
                 }`}
